@@ -1,23 +1,32 @@
 #!/usr/bin/python3
-
-from sys import argv
-from math import sqrt
-
-
-def factors(n):
-    if n % 2 == 0:
-        return n, n // 2, 2
-    for q in range(3, int(sqrt(n)) + 1, 2):
-        if n % q == 0:
-            return n, n // q, q
-    return n, n, 1
-
+""" Gets two first factors of any number """
+from sys import argv, stderr
+import math
 
 if len(argv) != 2:
-    print("Usage: factors <file>")
+    stderr.write("Usage: factors <file>\n")
+    exit(1)
 
-with open(argv[1], mode="r") as f:
+with open(argv[1], 'r') as f:
     for line in f:
-        n = int(line)
-        f = factors(n)
-        print("{}={}*{}".format(f[0], f[1], f[2]))
+        num = int(line)
+        if num % 2 == 0:
+            i = 2
+            print("{:d}={:d}*{:d}".format(num, int(num/i), i))
+        else:
+            fa = int(math.sqrt(num)) + 1
+            for i in range(3, fa, +2):
+                if num % i == 0:
+                    print("{:d}={:d}*{:d}".format(num,
+                                                  int(num/i), i))
+                    break
+                if num % (fa + i) == 0:
+                    print("{:d}={:d}*{:d}".format(num,
+                                                  fa + i,
+                                                  int(num/(fa + i))))
+                    break
+                if num % (fa - i) == 0:
+                    print("{:d}={:d}*{:d}".format(num,
+                                                  fa - 1,
+                                                  int(num/(fa - i))))
+                    break
