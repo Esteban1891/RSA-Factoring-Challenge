@@ -1,32 +1,25 @@
 #!/usr/bin/python3
-""" Gets two first factors of any number """
-from sys import argv, stderr
-import math
+from sys import argv
+from math import sqrt
 
-if len(argv) != 2:
-    stderr.write("Usage: factors <file>\n")
-    exit(1)
 
-with open(argv[1], 'r') as f:
-    for line in f:
-        num = int(line)
-        if num % 2 == 0:
-            i = 2
-            print("{:d}={:d}*{:d}".format(num, int(num/i), i))
-        else:
-            fa = int(math.sqrt(num)) + 1
-            for i in range(3, fa, +2):
+def factor():
+    with open(argv[1]) as f:
+        for line in f:
+            num = int(line)
+            print("{:d}=".format(num), end="")
+            if num % 2 == 0:
+                print("{}*2".format(num//2))
+                continue
+            sqn = int(sqrt(num))
+            if sqn % 2 == 0:
+                sqn += 1
+            for i in range(3, sqn + 1, 2):
                 if num % i == 0:
-                    print("{:d}={:d}*{:d}".format(num,
-                                                  int(num/i), i))
+                    print("{}*{}".format(i, num//i))
                     break
-                if num % (fa + i) == 0:
-                    print("{:d}={:d}*{:d}".format(num,
-                                                  fa + i,
-                                                  int(num/(fa + i))))
-                    break
-                if num % (fa - i) == 0:
-                    print("{:d}={:d}*{:d}".format(num,
-                                                  fa - 1,
-                                                  int(num/(fa - i))))
-                    break
+            if num % i != 0:
+                print("{}={}*1".format(num, num))
+
+
+factor()
