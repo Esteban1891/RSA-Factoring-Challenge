@@ -1,10 +1,30 @@
-#!/usr/bin/env bash
-# Read number from file and print his factors in file
+#!/usr/bin/python3
+"""read_file
+    """
+from sys import argv
 
-FILE=$1
 
-while read NUM
-do
-    factors=($(factor $NUM))
-    echo "$NUM=$(($NUM/${factors[1]}))*${factors[1]}"
-done < $FILE
+def factory(n=0):
+    if (n % 2 == 0):
+        return 2
+    i = 3
+    while i * i <= n:
+        if n % i == 0:
+            return i
+        i += 2
+
+
+def factors(filename):
+    """read_file(filename)
+    Keyword Arguments:
+        filename {str} -- name of the file (default: {""})
+    """
+    with open(filename, encoding="utf-8") as my_file:
+        for i in my_file.readlines():
+            n = int(i)
+            result = factory(n)
+            print("{}={}*{}".format(int(n), int(n//result), int(result)))
+
+
+if __name__ == "__main__":
+    factors(argv[1])

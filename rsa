@@ -1,0 +1,59 @@
+#!/usr/bin/python3
+"""read_file
+    """
+from sys import argv
+
+
+def isPrime(n):
+
+    # Corner cases
+    if (n <= 1):
+        return False
+    if (n <= 3):
+        return True
+
+    # This is checked so that we can skip
+    # middle five numbers in below loop
+    if (n % 2 == 0 or n % 3 == 0):
+        return False
+
+    i = 5
+    while(i * i <= n):
+        if (n % i == 0 or n % (i + 2) == 0):
+            return False
+        i = i + 6
+
+    return True
+
+
+def factory(n=0):
+    if (n % 2 == 0):
+        return 2
+    i = 3
+    while i * i <= n:
+        if n % i == 0:
+            return i
+        i += 2
+
+
+def factors(filename):
+    """read_file(filename)
+    Keyword Arguments:
+        filename {str} -- name of the file (default: {""})
+    """
+    with open(filename, encoding="utf-8") as my_file:
+        for i in my_file.readlines():
+            n = int(i)
+            result = factory(n)
+            prime = isPrime(result)
+            if prime is False:
+                return
+            div = n//result
+            prime2 = isPrime(div)
+            if prime2 is False:
+                return
+            print("{}={}*{}".format(int(n), int(div), int(result)))
+
+
+if __name__ == "__main__":
+    factors(argv[1])
