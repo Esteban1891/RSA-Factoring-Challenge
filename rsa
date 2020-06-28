@@ -1,59 +1,46 @@
 #!/usr/bin/python3
-"""read_file
-    """
-from sys import argv
+""" Gets two first prime factors of any number """
+from sys import argv, stderr
+import math
 
 
-def isPrime(n):
+if len(argv) != 2:
+    stderr.write("Usage: factors <file>\n")
+    exit(1)
 
-    # Corner cases
-    if (n <= 1):
+
+def checkPrime(num):
+    """ Check if number is prime """
+    i = 3
+    if num % 2 == 0:
         return False
-    if (n <= 3):
-        return True
-
-    # This is checked so that we can skip
-    # middle five numbers in below loop
-    if (n % 2 == 0 or n % 3 == 0):
-        return False
-
-    i = 5
-    while(i * i <= n):
-        if (n % i == 0 or n % (i + 2) == 0):
+    while i * i <= num:
+        if num % i == 0:
             return False
-        i = i + 6
-
+        i += 2
     return True
 
 
-def factory(n=0):
-    if (n % 2 == 0):
-        return 2
-    i = 3
-    while i * i <= n:
-        if n % i == 0:
-            return i
-        i += 2
+def factorNumber(num):
+    """ Calculates factor prime number """
+    if num % 2 == 0:
+        i = 2
+        print("{:d}={:d}*{:d}".format(num, int(num/i), i))
+    else:
+        fa = math.sqrt(num)
+        if fa % 1 == 0:
+            print("{:d}={:d}*{:d}".format(num, int(num/i), i))
+            return
+        fa = int(fa) + 1
+        for i in range(3, fa, +2):
+            if num % i == 0:
+                if checkPrime(i):
+                    print("{:d}={:d}*{:d}".format(num,
+                                                  int(num/i),
+                                                  i))
+                    return
 
 
-def factors(filename):
-    """read_file(filename)
-    Keyword Arguments:
-        filename {str} -- name of the file (default: {""})
-    """
-    with open(filename, encoding="utf-8") as my_file:
-        for i in my_file.readlines():
-            n = int(i)
-            result = factory(n)
-            prime = isPrime(result)
-            if prime is False:
-                return
-            div = n//result
-            prime2 = isPrime(div)
-            if prime2 is False:
-                return
-            print("{}={}*{}".format(int(n), int(div), int(result)))
-
-
-if __name__ == "__main__":
-    factors(argv[1])
+with open(argv[1], 'r') as f:
+    for line in f:
+        factorNumber(int(line))
