@@ -1,30 +1,23 @@
 #!/usr/bin/python3
-"""read_file
-    """
+
 from sys import argv
+from math import sqrt
 
 
-def factory(n=0):
-    if (n % 2 == 0):
-        return 2
-    i = 3
-    while i * i <= n:
-        if n % i == 0:
-            return i
-        i += 2
+def factors(n):
+    if n % 2 == 0:
+        return n, n // 2, 2
+    for q in range(3, int(sqrt(n)) + 1, 2):
+        if n % q == 0:
+            return n, n // q, q
+    return n, n, 1
 
 
-def factors(filename):
-    """read_file(filename)
-    Keyword Arguments:
-        filename {str} -- name of the file (default: {""})
-    """
-    with open(filename, encoding="utf-8") as my_file:
-        for i in my_file.readlines():
-            n = int(i)
-            result = factory(n)
-            print("{}={}*{}".format(int(n), int(n//result), int(result)))
+if len(argv) != 2:
+    print("Usage: factors <file>")
 
-
-if __name__ == "__main__":
-    factors(argv[1])
+with open(argv[1], mode="r") as f:
+    for line in f:
+        n = int(line)
+        f = factors(n)
+        print("{}={}*{}".format(f[0], f[1], f[2]))
