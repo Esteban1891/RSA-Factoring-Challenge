@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Read number from file and print his factors in file
+
+FILE=$1
+
+while read NUM
+do
+    factors=($(factor $NUM))
+    echo "$NUM=$(($NUM/${factors[1]}))*${factors[1]}"
+done < $FILE
