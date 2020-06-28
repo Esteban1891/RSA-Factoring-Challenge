@@ -1,46 +1,48 @@
-#!/usr/bin/python3
-""" Gets two first prime factors of any number """
-from sys import argv, stderr
-import math
+#!/usr/bin/env bash
+#is a challenge
+check_factor()
+{
+	if [ $# -ne 3 ];
+        then
+                args=("$@")
+                count=0
+                num2=1
+                for a in ${args[*]};
+                do
+                        if [ $count -gt 1 ];
+                        then
+                                num2=$(echo $a*$num2 | bc)
+                        fi
+                        count=$((count + 1))
+                done
+        else
+                num2=$3
+        fi
 
+        num1=$2
+        num=$(echo "$1" | tr ':' '=')
 
-if len(argv) != 2:
-    stderr.write("Usage: factors <file>\n")
-    exit(1)
+        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
+	        if ((result == 1)); then
+		        numcp=$num1
+		        num1=$num2
+		        num2=$numcp
+                fi
 
+        echo "$num$num1*$num2"
+}
 
-def checkPrime(num):
-    """ Check if number is prime """
-    i = 3
-    if num % 2 == 0:
-        return False
-    while i * i <= num:
-        if num % i == 0:
-            return False
-        i += 2
-    return True
+if [ $# -ne 1 ]
+then
+        echo 'Usage: rsa <file>'
+        exit 1
+else
 
+        while read i
+        do
 
-def factorNumber(num):
-    """ Calculates factor prime number """
-    if num % 2 == 0:
-        i = 2
-        print("{:d}={:d}*{:d}".format(num, int(num/i), i))
-    else:
-        fa = math.sqrt(num)
-        if fa % 1 == 0:
-            print("{:d}={:d}*{:d}".format(num, int(num/i), i))
-            return
-        fa = int(fa) + 1
-        for i in range(3, fa, +2):
-            if num % i == 0:
-                if checkPrime(i):
-                    print("{:d}={:d}*{:d}".format(num,
-                                                  int(num/i),
-                                                  i))
-                    return
+                result=$(factor "$i")
+                check_factor $result
 
-
-with open(argv[1], 'r') as f:
-    for line in f:
-        factorNumber(int(line))
+        done < "$1"
+fi
